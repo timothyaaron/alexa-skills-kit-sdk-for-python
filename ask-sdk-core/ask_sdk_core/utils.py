@@ -19,6 +19,7 @@ import sys
 import typing
 
 from ask_sdk_model import IntentRequest
+from ask_sdk_model import CanFulfillIntentRequest
 
 from .__version__ import __version__
 
@@ -70,9 +71,13 @@ def is_intent_name(name):
     """
     def can_handle_wrapper(handler_input):
         # type: (HandlerInput) -> bool
-        return (isinstance(
-            handler_input.request_envelope.request, IntentRequest) and
-                handler_input.request_envelope.request.intent.name == name)
+        return (
+            (
+                isinstance(handler_input.request_envelope.request, IntentRequest) or
+                isinstance(handler_input.request_envelope.request, CanFulfillIntentRequest)
+            ) and
+            handler_input.request_envelope.request.intent.name == name
+        )
     return can_handle_wrapper
 
 
