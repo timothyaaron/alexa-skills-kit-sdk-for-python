@@ -24,7 +24,12 @@ class AskSdkException(Exception):
 
 class DispatchException(AskSdkException):
     """Class for exceptions raised during dispatch logic."""
-    pass
+    def __init__(self, message, request=None):
+
+        # Call the base class constructor with the parameters it needs
+        super().__init__(message)
+
+        self.request = request
 
 
 class AttributesManagerException(AskSdkException):

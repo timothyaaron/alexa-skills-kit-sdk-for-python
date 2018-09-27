@@ -193,9 +193,15 @@ class RequestDispatcher(AbstractRequestDispatcher):
                 break
 
         if request_handler_chain is None:
+            request = handler_input.request_envelope.request
+            request_type = request.object_type
+            intent = request.intent.name if request_type == 'IntentRequest' else None
+            message_key = f"{request_type} : {intent}" if intent else request_type
+
             raise DispatchException(
-                "Couldn't find handler that can handle the "
-                "request: {}".format(handler_input.request_envelope.request))
+                f"Couldn't find handler that can handle the request - {message_key}",
+                request=request.to_dict(),
+            )
 
         request_handler = request_handler_chain.request_handler
         supported_handler_adapter = None
